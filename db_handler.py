@@ -80,7 +80,7 @@ def insert_post(post):
     inserted_post = {}
 
     for key, val in post.items():
-        if val and key not in defaults.EXCLUSIONS:
+        if val and key in defaults.POST_ATTRIBUTES:
             inserted_post[key] = val
 
     inserted_post['label'] = "Not Yet Reviewed"
