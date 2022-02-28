@@ -9,15 +9,31 @@ def run_instances():
     list_size = len(FacebookGroups.reg_list)
     i = 0
     while True:
-        print("Run:", i+1, "\nGroup name:", FacebookGroups.reg_list[i % list_size].g_name)
-        if not FacebookGroups.reg_list[i % list_size].scrape_group():
+        print("Run:", i+1, "\nGroup name:", FacebookGroups.reg_list[i].g_name)
+
+        state = FacebookGroups.reg_list[i % list_size].scrape_group()
+        if not state:
+            print("Breaking after reaching max number of posts per batch. Scraping of next batch will begin in"
+                  + str(defaults.BREAK_TIME/60/60) + "hrs")
+            FacebookGroups.batch_posts = 0
+            time.sleep(defaults.BREAK_TIME)
             continue
-        FacebookGroups.reg_list[i % list_size].g_runs += 1
+        elif state == 1:
+            print("Scraping of", FacebookGroups.reg_list[i % list_size].g_name,
+                  "terminated after it's gone through",
+                  FacebookGroups.reg_list[i % len(FacebookGroups.reg_list)].g_max_known, "known posts\n")
+            time.sleep(random.uniform(30, 60))
+        elif state == 2:
+            print("Temporarily banned by Facebook. Scraping of next batch will begin in"
+                  + str(defaults.BAN_SLEEP/60/60) + "hrs")
+            time.sleep(defaults.BAN_SLEEP)
+
         i += 1
-        if i == 1:
-            exit()
-        print("Breaking for " + str(defaults.BREAK_TIME) + "s before moving on to next group")
-        time.sleep(defaults.BREAK_TIME)
+        if i % list_size == 0:
+            print("Breaking after covering all groups. Scraping of next batch will begin in"
+                  + str(defaults.BREAK_TIME/60/60) + "hrs")
+            FacebookGroups.batch_posts = 0
+            time.sleep(defaults.BREAK_TIME)
 
 
 if __name__ == '__main__':
@@ -26,6 +42,9 @@ if __name__ == '__main__':
     uppereast = FacebookGroups('Upper East Side', 'uppereastside35andolder')
 
     run_instances()
+
+
+
 
 
 # Potential groups not yet approved:

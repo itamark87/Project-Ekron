@@ -7,7 +7,7 @@ MAX_KNOWN_POSTS = 6
 # For lower risk of account ban set a lower number
 MAX_NEW_POSTS = 60
 
-# Number of seconds navigator waits before running next instance
+# Number of seconds navigator waits before running next batch
 # For lower risk of account ban set a higher number
 BREAK_TIME = 60*2
 
@@ -25,15 +25,26 @@ COMMON_NO_SAVE = ['link', 'links']
 # post will not be considered as updated.
 COMMON_CHANGES_SHARE = ['text', 'shared_text']
 
-# List of attributes that will not be inserted into the database by db_handler.
-EXCLUSIONS = ['image_id', 'image', 'image_lowquality', 'images', 'images_lowquality', 'images_lowquality_description',
-              'video', 'video_id', 'videos', 'available', 'post_url', 'user_url', 'shared_post_url', 'shared_time',
-              'timestamp', 'with', 'comments', 'factcheck', 'listing_title', 'listing_price', 'listing_location']
+# List of post attributes that will be inserted into the database by db_handler
+POST_ATTRIBUTES = ['post_id', 'text', 'time', 'user_id', 'username', 'images_description', 'shared_text'
+                   'shared_post_id', 'shared_user_id', 'shared_username', 'comments_full']
 
-POST_ATTRIBUTES = ['post_id', 'text', 'time', 'user_id', 'username', '']
+# List of optional attributes for future uses:
+FUTURE_ATTRIBUTES = ['likes', 'shares', 'page_id', 'image_ids', 'video_thumbnail']
 
 # List of comment attributes that *will* be inserted into the database by db_handler
 COMMENT_ATTRIBUTES = ['comment_id', 'commenter_id', 'commenter_name', 'comment_text']
 
-# If only one cookies file is used
+# Default cookies file. Useful when only one cookies file is used
 COOKIES = 'cookies.txt'
+
+# Default configuration for scraping with/without comments. Will be used unless specified otherwise
+COMMENTS = False
+
+# Time scraper sleeps when it gets temporarily banned by Facebook
+BAN_SLEEP = 60*60*24
+
+# List of attributes that will not be inserted into the database by db_handler.
+EXCLUSIONS = ['image_id', 'image', 'image_lowquality', 'images', 'images_lowquality', 'images_lowquality_description',
+              'video', 'video_id', 'videos', 'available', 'post_url', 'user_url', 'shared_post_url', 'shared_time',
+              'timestamp', 'with', 'comments', 'factcheck', 'listing_title', 'listing_price', 'listing_location']
