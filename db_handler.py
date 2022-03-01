@@ -1,6 +1,5 @@
 from pymongo import MongoClient
 from datetime import datetime
-
 import defaults
 
 
@@ -8,7 +7,7 @@ def init(cluster, g_name):
 
     global collection
     client = MongoClient(cluster)
-    db = client["group_scraper"]
+    db = client["group_scraper_new"]
     collection = db[g_name]
 
 
@@ -30,25 +29,13 @@ def comments_cleanup(comments):
     return new_comments
 
 
-def is_shared_related(scraped_post, db_post):
-
-    for key in defaults.COMMON_CHANGES_SHARE:
-        if key not in scraped_post or key not in db_post:
-            return 0
-        if scraped_post[key] == db_post[key]:
-            return 0
-
-    return 1
-
-
 def post_known(scraped_post, db_post, older_list, update_time):
 
     changed = {}
-    shared_related = is_shared_related(scraped_post, db_post)
 
     for key, val in scraped_post.items():
         if key not in db_post:
-            if val and key not in defaults.EXCLUSIONS:
+            if val and key in defaults.POST_ATTRIBUTES:
                 changed[key] = ''
                 collection.update_one({'post_id': scraped_post['post_id']}, {"$set": {key: val}})
             continue
@@ -58,9 +45,7 @@ def post_known(scraped_post, db_post, older_list, update_time):
             else:
                 collection.update_one({'post_id': scraped_post['post_id']}, {"$unset": {key: 1}})
 
-            if key not in defaults.COMMON_NO_SAVE:
-                if not shared_related or key not in defaults.COMMON_CHANGES_SHARE:
-                    changed[key] = db_post[key]
+            changed[key] = db_post[key]
 
     collection.update_one({'post_id': scraped_post['post_id']}, {"$set": {'update_time': datetime.now()}})
 
@@ -69,8 +54,6 @@ def post_known(scraped_post, db_post, older_list, update_time):
         older_list.append(changed)
         collection.update_one({'post_id': scraped_post['post_id']}, {"$set": {'older': older_list}})
         changed.pop("update_time")
-        if not all(elem in defaults.COMMON_SAVE for elem in list(changed)):
-            return 0
 
     return 1
 
@@ -97,15 +80,12 @@ def handle_post(scraped_post):
     db_post = collection.find_one({'post_id': scraped_post['post_id']})
 
     if db_post:
-        # difference = (datetime.now() - db_post['update_time'])
-        # if difference.total_seconds() < 60:
-        #     return 0
-        # del db_post['_id']
-        # older_list = db_post.pop('older', [])
-        # update_time = db_post.pop('update_time')
-        # return post_known(scraped_post, db_post, older_list, update_time)
-        ##### Delete later #####
-        return 1
-        ########################
+        difference = (datetime.now() - db_post['update_time'])
+        if difference.total_seconds() < 60:
+            return 0
+        del db_post['_id']
+        older_list = db_post.pop('older', [])
+        update_time = db_post.pop('update_time')
+        return post_known(scraped_post, db_post, older_list, update_time)
 
     return insert_post(scraped_post)

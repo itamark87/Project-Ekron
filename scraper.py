@@ -1,8 +1,7 @@
 from facebook_scraper import get_posts
 from facebook_scraper import exceptions
-
+from group_class import FacebookGroups
 import db_handler
-
 import random
 import time
 
@@ -42,7 +41,7 @@ def run(**kwargs):
             else:
                 known_count = 0
 
-            time.sleep(random.uniform(10, 15))
+            time.sleep(random.uniform(20, 30))
 
     except exceptions.TemporarilyBanned:
         return 2

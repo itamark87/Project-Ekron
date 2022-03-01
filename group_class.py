@@ -1,7 +1,5 @@
 import defaults
 
-from scraper import scrape
-
 
 class FacebookGroups:
 
@@ -17,10 +15,6 @@ class FacebookGroups:
         self.g_max_new = max_new
         self.comments = comments
         FacebookGroups.reg_list.append(self)
-
-    def scrape_group(self):
-        kwargs = self.__dict__
-        return scrape(**kwargs)
 
 
 

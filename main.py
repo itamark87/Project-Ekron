@@ -1,7 +1,8 @@
 from group_class import FacebookGroups
+from scraper import scrape
 import defaults
-
 import time
+import random
 
 
 def run_instances():
@@ -9,12 +10,12 @@ def run_instances():
     list_size = len(FacebookGroups.reg_list)
     i = 0
     while True:
-        print("Run:", i+1, "\nGroup name:", FacebookGroups.reg_list[i].g_name)
-
-        state = FacebookGroups.reg_list[i % list_size].scrape_group()
+        print("Run:", i+1, "\nGroup name:", FacebookGroups.reg_list[i % list_size].g_name)
+        kwargs = FacebookGroups.reg_list[i % list_size].__dict__
+        state = scrape(**kwargs)
         if not state:
             print("Breaking after reaching max number of posts per batch. Scraping of next batch will begin in"
-                  + str(defaults.BREAK_TIME/60/60) + "hrs")
+                  + str(defaults.BREAK_TIME/60/60) + " hrs")
             FacebookGroups.batch_posts = 0
             time.sleep(defaults.BREAK_TIME)
             continue
@@ -25,13 +26,13 @@ def run_instances():
             time.sleep(random.uniform(30, 60))
         elif state == 2:
             print("Temporarily banned by Facebook. Scraping of next batch will begin in"
-                  + str(defaults.BAN_SLEEP/60/60) + "hrs")
+                  + str(defaults.BAN_SLEEP/60/60) + " hrs")
             time.sleep(defaults.BAN_SLEEP)
 
         i += 1
         if i % list_size == 0:
             print("Breaking after covering all groups. Scraping of next batch will begin in"
-                  + str(defaults.BREAK_TIME/60/60) + "hrs")
+                  + str(defaults.BREAK_TIME/60/60) + " hrs")
             FacebookGroups.batch_posts = 0
             time.sleep(defaults.BREAK_TIME)
 
