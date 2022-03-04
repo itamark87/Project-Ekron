@@ -103,11 +103,10 @@ if __name__ == '__main__':
     print("SVM Accuracy:", metrics.accuracy_score(y_test, predicted))
     print("SVM Precision:", metrics.precision_score(y_test, predicted))
     print("SVM Recall:", metrics.recall_score(y_test, predicted))
-    # print(predicted)
-    # for post in X_test:
-    #    print(post)
 
-    #pipe.transform(X_train, y_train)  # here x is your text data, and y is going to be your target
+
+
+
 
 
     # Score board:
@@ -133,7 +132,3 @@ if __name__ == '__main__':
     # Random Forest accuracy: 0.9526627218934911/0.951048951048951
     # Random Forest Precision:  1.0
     # Random Forest Recall: 0.058823529411764705/0.06666666666666667
-
-    #for i in range(10):
-    #    print(predicted[i])
-    #print(X_test)
