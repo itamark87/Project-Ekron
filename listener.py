@@ -2,6 +2,7 @@ from pymongo import MongoClient
 import random
 from datetime import datetime
 from rich import print
+from predict import predict
 
 
 # Initiate cluster and db
@@ -14,7 +15,8 @@ def init(cluster):
 
 # Inspect text and return a label
 def inspect(text):
-    return random.uniform(0, 1)
+    return predict(text)
+    # return random.uniform(0, 1)
 
 
 # Initiate a MongoDB change stream, send string attributes to inspect
