@@ -1,11 +1,13 @@
 from facebook_scraper import get_posts
 from facebook_scraper import exceptions
 from group_class import FacebookGroups
+import defaults
 import db_handler
 import random
 import time
 
 
+# Run scraper and pass all posts to db_handler
 def run(**kwargs):
 
     try:
@@ -29,7 +31,7 @@ def run(**kwargs):
             print(post)
 
             FacebookGroups.batch_posts += 1
-            if FacebookGroups.batch_posts == kwargs['g_max_new']:
+            if FacebookGroups.batch_posts == defaults.MAX_NEW_POSTS:
                 db_handler.handle_post(post)
                 return 0
 
@@ -47,6 +49,7 @@ def run(**kwargs):
         return 2
 
 
+# Initiate a MongoDB cluster and run scraper
 def scrape(**kwargs):
     with open('cluster.txt', 'r') as file:
         cluster = file.readline()

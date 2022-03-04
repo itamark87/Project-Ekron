@@ -4,6 +4,7 @@ from datetime import datetime
 from rich import print
 
 
+# Initiate cluster and db
 def init(cluster):
 
     global db
@@ -11,10 +12,13 @@ def init(cluster):
     db = client["group_scraper_new"]
 
 
+# Inspect text and return a label
 def inspect(text):
     return random.uniform(0, 1)
 
 
+# Initiate a MongoDB change stream, send string attributes to inspect
+# If a post is found to be relevant, print the text, a link to the post and a link to the user
 def listen():
     for change in db.watch(full_document='updateLookup'):
         if change['fullDocument']['label'] == 1:
@@ -60,6 +64,8 @@ def listen():
             print(f"Contact shared post user: https://www.facebook.com/{str(change['fullDocument']['shared_user_id'])}/")
 
 
+# #### Start Here #### #
+# Initiate cluster and run listener
 if __name__ == '__main__':
 
     with open('cluster.txt', 'r') as file:

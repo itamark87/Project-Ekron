@@ -5,7 +5,9 @@ import time
 import random
 
 
-def run_instances():
+# Running instances, the main functions determines which group will be scraped and when
+# When a group scraping terminates, main will decide what happens next, depending on the cause
+def main():
 
     list_size = len(FacebookGroups.reg_list)
     i = 0
@@ -37,26 +39,17 @@ def run_instances():
             time.sleep(defaults.BREAK_TIME)
 
 
+# #### START HERE ##### #
+# Add group instances, mandatory attributes are group name and group id
+# Unless specified, all other attributes will be set as configured at defaults.py
 if __name__ == '__main__':
     jackson_heights = FacebookGroups('Jackson Heights New', 35851988964)
     ilsington = FacebookGroups('Ilsington', 743308202528264)
     uppereast = FacebookGroups('Upper East Side', 'uppereastside35andolder')
 
-    run_instances()
+    main()
 
 
-
-
-
-# Potential groups not yet approved:
-    #astoria = FacebookGroups('Astoria', 2212914039)
-    #florentin = FacebookGroups('Florentin Residents', 35950422406)
-
-# Hebrew groups:
-    # florentin_small = FacebookGroups('Florentin Residents Small', 166176720391064)
-    # secret_tlv = FacebookGroups('Secret Tel Aviv', 327483250942)
-    # yemen_vineyard = FacebookGroups('Yemenite Vineyard Residents', 560107510706998)
-    # center_tlv = FacebookGroups('Center TLV Residents', 820474844639551)
 
 
 

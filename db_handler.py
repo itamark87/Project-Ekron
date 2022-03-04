@@ -3,6 +3,7 @@ from datetime import datetime
 import defaults
 
 
+# Initiate cluster, db and collection
 def init(cluster, g_name, g_id):
 
     global collection
@@ -15,6 +16,7 @@ def init(cluster, g_name, g_id):
         collection.insert_one({'post_id': "0", 'group_id': str(g_id)})
 
 
+# When scarping with comments, remove unneeded attributes
 def comments_cleanup(comments):
 
     new_comments = []
@@ -33,6 +35,7 @@ def comments_cleanup(comments):
     return new_comments
 
 
+# If post is known to the DB, update it and save older information in an array
 def post_known(scraped_post, db_post, older_list, update_time):
 
     changed = {}
@@ -62,6 +65,7 @@ def post_known(scraped_post, db_post, older_list, update_time):
     return 1
 
 
+# If post is unknown to the DB, insert the post with the desirable attributes
 def insert_post(post):
 
     inserted_post = {}
@@ -76,7 +80,12 @@ def insert_post(post):
     return 0
 
 
+# Main function of db_handler
+# Receives the scraped post and checks if it is a known post to DB
 def handle_post(scraped_post):
+
+    if not scraped_post['post_id']:
+        return 0
 
     if scraped_post['comments_full']:
         scraped_post['comments_full'] = comments_cleanup(scraped_post['comments_full'])
