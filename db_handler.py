@@ -3,12 +3,16 @@ from datetime import datetime
 import defaults
 
 
-def init(cluster, g_name):
+def init(cluster, g_name, g_id):
 
     global collection
     client = MongoClient(cluster)
     db = client["group_scraper_new"]
     collection = db[g_name]
+
+    group_dict = collection.find_one({'post_id': 0})
+    if not group_dict:
+        collection.insert_one({'post_id': "0", 'group_id': str(g_id)})
 
 
 def comments_cleanup(comments):

@@ -50,7 +50,7 @@ def run(**kwargs):
 def scrape(**kwargs):
     with open('cluster.txt', 'r') as file:
         cluster = file.readline()
-    db_handler.init(cluster, kwargs['g_name'])
+    db_handler.init(cluster, kwargs['g_name'], kwargs['g_id'])
     return run(**kwargs)
 
 

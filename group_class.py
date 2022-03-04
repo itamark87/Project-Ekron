@@ -16,6 +16,13 @@ class FacebookGroups:
         self.comments = comments
         FacebookGroups.reg_list.append(self)
 
+    @classmethod
+    def get_id(cls, name):
+        for group in cls.reg_list:
+            if group.g_name == name:
+                return group.g_id
+        return 0
+
 
 
 
