@@ -8,7 +8,3 @@ def predict(text):
     res = my_model.predict([text])
     return res[0]
 
-
-if __name__ == '__main__':
-    print(predict("i lost my dog"))
-
