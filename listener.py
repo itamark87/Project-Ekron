@@ -33,8 +33,9 @@ def listen():
             continue
         d['operation'] = change['operationType']
         d['coll'] = change['ns']['coll']
+        d['post_id'] = change['fullDocument']['post_id']
         dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        print(f"\n[red]{dt_string} Post {change['fullDocument']['post_id']} in group {d['coll']}[/]")
+        print(f"\n[red]{dt_string} Post {d['post_id']} in group {d['coll']}[/]")
         labels = {}
         if 'text' in d.keys() and inspect(d['text']):
             labels['text'] = d['text']
@@ -60,10 +61,15 @@ def listen():
                     print(f'{key}. {val}')
 
             group_id = str(db[d['coll']].find_one({'post_id': '0'})['group_id'])
-            print(f"\nLink to post: https://www.facebook.com/groups/{group_id}/posts/{change['fullDocument']['post_id']}/")
+            print(f"\nLink to post: https://www.facebook.com/groups/{group_id}/posts/{d['post_id']}/")
             print(f"Contact user: https://www.facebook.com/{str(change['fullDocument']['user_id'])}/")
             if 'shared_text' in labels.keys() and labels['shared_text']:
                 print(f"Contact shared post user: https://www.facebook.com/{str(change['fullDocument']['shared_user_id'])}/")
+
+            # db.d['coll'].update_one({'post_id': d['post_id']}, {"$set": {'label': "1"}})
+        else:
+            pass
+            # db.d['coll'].update_one({'post_id': d['post_id']}, {"$set": {'label': "0"}})
 
 
 # #### Start Here #### #
