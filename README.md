@@ -11,7 +11,7 @@ In addition, to get the tool started you are going to need:
 2. A text file named "cookies.txt" containing browser cookies after your facebook login. For that, use browser extensions:
 
 * [Get Cookies.txt (Chrome)](https://chrome.google.com/webstore/detail/get-cookiestxt/bgaddhkoddajcdgocldbbfleckgcbcid?hl=en) 
-* [Cookie Quick Manager (Firefox)](https://addons.mozilla.org/en-US/firefox/addon/cookie-quick-manager/). 
+* [Cookie Quick Manager (Firefox)](https://addons.mozilla.org/en-US/firefox/addon/cookie-quick-manager/)
 
 Make sure that you include both the c_user cookie and the xs cookie.
 
