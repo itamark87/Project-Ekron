@@ -59,11 +59,11 @@ def listen():
                 for key, val in labels['images'].items():
                     print(f'{key}. {val}')
 
-        group_id = str(db[d['coll']].find_one({'post_id': '0'})['group_id'])
-        print(f"\nLink to post: https://www.facebook.com/groups/{group_id}/posts/{change['fullDocument']['post_id']}/")
-        print(f"Contact user: https://www.facebook.com/{str(change['fullDocument']['user_id'])}/")
-        if 'shared_text' in labels.keys() and labels['shared_text']:
-            print(f"Contact shared post user: https://www.facebook.com/{str(change['fullDocument']['shared_user_id'])}/")
+            group_id = str(db[d['coll']].find_one({'post_id': '0'})['group_id'])
+            print(f"\nLink to post: https://www.facebook.com/groups/{group_id}/posts/{change['fullDocument']['post_id']}/")
+            print(f"Contact user: https://www.facebook.com/{str(change['fullDocument']['user_id'])}/")
+            if 'shared_text' in labels.keys() and labels['shared_text']:
+                print(f"Contact shared post user: https://www.facebook.com/{str(change['fullDocument']['shared_user_id'])}/")
 
 
 # #### Start Here #### #
