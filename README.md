@@ -16,6 +16,7 @@ or
 
 Make sure that you include both the c_user cookie and the xs cookie.
 
+How to run:
 - Run main.py for scraping to begin
 - Run listener.py for the detection of content
 
