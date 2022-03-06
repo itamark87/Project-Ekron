@@ -8,7 +8,7 @@ Social network contain plenty of useful information for municipalities and other
 See requierments file.
 In addition, to get the tool started you are going to need:
 1. A text file named "cluster.txt" containing a connection string to your MongoDB cluster
-2. A text file named "cookies.txt" containing browser cookies after your facebook login. For that, use broser extensions:
+2. A text file named "cookies.txt" containing browser cookies after your facebook login. For that, use browser extensions:
 
 * [Get Cookies.txt (Chrome)](https://chrome.google.com/webstore/detail/get-cookiestxt/bgaddhkoddajcdgocldbbfleckgcbcid?hl=en) 
 or 
