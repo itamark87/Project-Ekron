@@ -1,9 +1,9 @@
-# project_ekron
+# Project-Ekron
 
 This is a python based tool intended to integrate as an extension to a smart city management system. 
 The tool identifies relevant content from social networks using machine learning models.
 
-Social network contain plenty of useful information for municipalities and other regional councils for running their city/region but detecting such information in this nonstopping and huge information stream can be like finding a needle in a haystack. Therefore, a tool that can detect, point and save such information can be very beneficial.
+Social networks contain plenty of useful information for municipalities and other regional councils for running their city/region. But detecting such information in this nonstopping and huge information stream can be like finding a needle in a haystack. Therefore, a tool that can detect, point and save such information can be very beneficial.
 
 See requierments file.
 In addition, to get the tool started you are going to need:
