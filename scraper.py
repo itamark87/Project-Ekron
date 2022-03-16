@@ -1,7 +1,7 @@
 from facebook_scraper import get_posts
 from facebook_scraper import exceptions
 from group_class import FacebookGroups
-import defaults
+import config
 import db_handler
 import random
 import time
@@ -12,8 +12,8 @@ def run(**kwargs):
 
     try:
 
-        posts = get_posts(group=kwargs['g_id'], cookies=kwargs['g_cookies'], pages=10000, timeout=40,
-                          options={"comments": kwargs['comments'], 'posts_per_page': 14})
+        posts = get_posts(group=kwargs['g_id'], cookies=kwargs['g_cookies'], pages=10, timeout=40,
+                          options={"comments": kwargs['comments'], 'posts_per_page': 20})
 
         known_count = 0
         for post in posts:
@@ -31,19 +31,20 @@ def run(**kwargs):
             print(post)
 
             FacebookGroups.batch_posts += 1
-            if FacebookGroups.batch_posts == defaults.MAX_NEW_POSTS:
+            print(FacebookGroups.batch_posts)  ##########################
+            if FacebookGroups.batch_posts == config.MAX_NEW_POSTS:
                 db_handler.handle_post(post)
                 return 0
 
             if db_handler.handle_post(post):
                 known_count += 1
-                print(f"Post known to database - {str(known_count)}# occurrence in a row")
+                print(f"Post known to database - {str(known_count)}# occurrence in a row\n")
                 if known_count == kwargs['g_max_known']:
                     return 1
             else:
                 known_count = 0
 
-            time.sleep(random.uniform(20, 30))
+            time.sleep(random.uniform(config.POSTS_GAP[0], config.POSTS_GAP[1]))
 
     except exceptions.TemporarilyBanned:
         return 2

@@ -16,35 +16,38 @@ def init(cluster):
 # Inspect text and return a label
 def inspect(text):
     return predict(text)
-    # return random.uniform(0, 1)
+    # return random.randint(0, 1)
 
 
 # Initiate a MongoDB change stream, send string attributes to inspect
 # If a post is found to be relevant, print the text, a link to the post and a link to the user
 def listen():
+    count = 0
     for change in db.watch(full_document='updateLookup'):
-        if change['fullDocument']['label'] == 1:
-            continue
+        count += 1
+        print(change)
         if change['operationType'] == 'insert':
             d = change['fullDocument']
         elif change['operationType'] == 'update':
             d = change['updateDescription']['updatedFields']
         else:
             continue
+        if change['fullDocument']['post_id'] == '0' or change['fullDocument']['label'] == 1:
+            continue
         d['operation'] = change['operationType']
         d['coll'] = change['ns']['coll']
         d['post_id'] = change['fullDocument']['post_id']
         dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        print(f"\n[red]{dt_string} Post {d['post_id']} in group {d['coll']}[/]")
+        print(f"\n[red]{dt_string} Post {d['post_id']} in group {d['coll']} ({str(count)})[/]")
         labels = {}
-        if 'text' in d.keys() and inspect(d['text']):
+        if 'text' in d.keys() and d['text'] and inspect(d['text']):
             labels['text'] = d['text']
-        if 'shared_text' in d.keys() and inspect(d['shared_text']):
+        if 'shared_text' in d.keys() and d['shared_text'] and inspect(d['shared_text']):
             labels['shared_text'] = d['shared_text']
         if 'images_description' in d.keys():
             images = {}
             for i in range(len(d['images_description'])):
-                if inspect(d['images_description'][i]):
+                if d['images_description'][i] and inspect(d['images_description'][i]):
                     images[i] = d['images_description'][i]
             if images:
                 labels['images'] = images

@@ -14,6 +14,9 @@ BREAK_TIME = 60*60*2.5
 # Number of seconds program waits when it gets temporarily banned by Facebook
 BAN_SLEEP = 60*60*24
 
+# Range of seconds scraper sleeps after each post is implemented in the DB (Random)
+POSTS_GAP = (20, 30)
+
 # List of post attributes that will be inserted into the database by db_handler
 POST_ATTRIBUTES = ['post_id', 'text', 'time', 'user_id', 'username', 'images_description', 'shared_text'
                    'shared_post_id', 'shared_user_id', 'shared_username', 'comments_full']

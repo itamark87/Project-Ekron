@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 from datetime import datetime
-import defaults
+import config
 
 
 # Initiate cluster, db and collection
@@ -11,7 +11,7 @@ def init(cluster, g_name, g_id):
     db = client["group_scraper_new"]
     collection = db[g_name]
 
-    group_dict = collection.find_one({'post_id': 0})
+    group_dict = collection.find_one({'post_id': "0"})
     if not group_dict:
         collection.insert_one({'post_id': "0", 'group_id': str(g_id)})
 
@@ -25,7 +25,7 @@ def comments_cleanup(comments):
 
         new_comment = {}
         for key in comment:
-            if key in defaults.COMMENT_ATTRIBUTES:
+            if key in config.COMMENT_ATTRIBUTES:
                 new_comment[key] = comment[key]
                 continue
             if key == "replies" and comment['replies']:
@@ -42,7 +42,7 @@ def post_known(scraped_post, db_post, older_list, update_time):
 
     for key, val in scraped_post.items():
         if key not in db_post:
-            if val and key in defaults.POST_ATTRIBUTES:
+            if val and key in config.POST_ATTRIBUTES:
                 changed[key] = ''
                 collection.update_one({'post_id': scraped_post['post_id']}, {"$set": {key: val}})
             continue
@@ -71,7 +71,7 @@ def insert_post(post):
     inserted_post = {}
 
     for key, val in post.items():
-        if val and key in defaults.POST_ATTRIBUTES:
+        if val and key in config.POST_ATTRIBUTES:
             inserted_post[key] = val
 
     inserted_post['label'] = "Not Yet Reviewed"
