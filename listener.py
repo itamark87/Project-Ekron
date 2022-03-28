@@ -15,8 +15,8 @@ def init(cluster):
 
 # Inspect text and return a label
 def inspect(text):
-    return predict(text)
-    # return random.randint(0, 1)
+    # return predict(text)
+    return random.randint(0, 1)
 
 
 # Initiate a MongoDB change stream, send string attributes to inspect
