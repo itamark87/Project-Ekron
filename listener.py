@@ -16,7 +16,6 @@ def init(cluster):
 # Inspect text and return a label
 def inspect(text):
     return predict(text)
-    # return random.randint(0, 1)
 
 
 # Initiate a MongoDB change stream, send string attributes to inspect
@@ -74,10 +73,10 @@ def listen():
             if 'shared_text' in labels.keys() and labels['shared_text']:
                 print(f"Contact shared post user: https://www.facebook.com/{str(change['fullDocument']['shared_user_id'])}/")
 
-            # db.d['coll'].update_one({'post_id': d['post_id']}, {"$set": {'label': "1"}})
+            db.d['coll'].update_one({'post_id': d['post_id']}, {"$set": {'label': "1"}})
         else:
             print("No relevant content found")
-            # db.d['coll'].update_one({'post_id': d['post_id']}, {"$set": {'label': "0"}})
+            db.d['coll'].update_one({'post_id': d['post_id']}, {"$set": {'label': "0"}})
 
 
 # #### Start Here #### #
