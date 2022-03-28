@@ -9,7 +9,7 @@ from predict import predict
 def init(cluster):
 
     global db
-    client = MongoClient(cluster)
+    client = MongoClient(cluster, connect=False)
     db = client["group_scraper_new"]
 
 
@@ -23,9 +23,11 @@ def inspect(text):
 # If a post is found to be relevant, print the text, a link to the post and a link to the user
 def listen():
     count = 0
+    dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    print(f"[red]{dt_string} Listener initiated")
     for change in db.watch(full_document='updateLookup'):
+
         count += 1
-        print(change)
         if change['operationType'] == 'insert':
             d = change['fullDocument']
         elif change['operationType'] == 'update':
@@ -40,6 +42,8 @@ def listen():
         dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         print(f"\n[red]{dt_string} Post {d['post_id']} in group {d['coll']} ({str(count)})[/]")
         labels = {}
+
+        # Begin inspection of text variables
         if 'text' in d.keys() and d['text'] and inspect(d['text']):
             labels['text'] = d['text']
         if 'shared_text' in d.keys() and d['shared_text'] and inspect(d['shared_text']):
@@ -52,6 +56,7 @@ def listen():
             if images:
                 labels['images'] = images
 
+        # If any of the text attributes is classified as 1, print it, add links and add label in DB
         if labels:
             print("Post found to be relevant, here is why:\n")
             if 'text' in labels.keys() and labels['text']:
@@ -71,7 +76,7 @@ def listen():
 
             # db.d['coll'].update_one({'post_id': d['post_id']}, {"$set": {'label': "1"}})
         else:
-            pass
+            print("No relevant content found")
             # db.d['coll'].update_one({'post_id': d['post_id']}, {"$set": {'label': "0"}})
 
 

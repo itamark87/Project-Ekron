@@ -4,16 +4,16 @@ import config
 
 
 # Initiate cluster, db and collection
-def init(cluster, g_name, g_id):
+def init(cluster, name, _id):
 
     global collection
     client = MongoClient(cluster)
     db = client["group_scraper_new"]
-    collection = db[g_name]
+    collection = db[name]
 
     group_dict = collection.find_one({'post_id': "0"})
     if not group_dict:
-        collection.insert_one({'post_id': "0", 'group_id': str(g_id)})
+        collection.insert_one({'post_id': "0", 'group_id': str(_id)})
 
 
 # When scarping with comments, remove unneeded attributes

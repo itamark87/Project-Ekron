@@ -1,7 +1,7 @@
 
 # Set this to be the number of posts scraped and known to the DB before scraping of group terminates
 # For lower likelihood of missing new and relevant posts set a higher number
-MAX_KNOWN_POSTS = 6
+MAX_KNOWN_POSTS = 7
 
 # Set this to be the general number of posts scraped before scraping of batch terminates
 # For lower risk of account ban set a lower number
@@ -9,7 +9,7 @@ MAX_NEW_POSTS = 200
 
 # Number of seconds program waits before running next batch
 # For lower risk of account ban set a higher number
-BREAK_TIME = 60*60*2.5
+BREAK_TIME = 60*60*0.5
 
 # Number of seconds program waits when it gets temporarily banned by Facebook
 BAN_SLEEP = 60*60*24
