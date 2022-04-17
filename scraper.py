@@ -2,6 +2,8 @@ from facebook_scraper import get_posts
 from facebook_scraper import exceptions
 from group_class import FacebookGroups
 from datetime import datetime
+from db_handler import handle_post
+from db_handler import init_collection
 import config
 import db_handler
 import random
@@ -14,7 +16,7 @@ def run(**kwargs):
     try:
 
         posts = get_posts(group=kwargs['id'], cookies=kwargs['cookies'], pages=10, timeout=40,
-                          options={"comments": kwargs['comments'], 'posts_per_page': 20})
+                          options={"comments": kwargs['comments'], "allow_extra_requests": False})
 
         known_count = 0
         for post in posts:
@@ -39,15 +41,15 @@ def run(**kwargs):
             for k in post.keys():
                 if k in config.POST_ATTRIBUTES and post[k]:
                     text = str(post[k]).replace("\n", " ")
-                    if len(text) > 94:
-                        text = text[:94] + "..."
-                    print(f"{k}: {text}")
+                    if len(text) > 90:
+                        text = text[:90] + "..."
+                    print(f"{k}: {text.replace('  ', ' ').replace(' ...', '...')}")
 
             if FacebookGroups.batch_posts == config.MAX_NEW_POSTS:
-                db_handler.handle_post(post)
+                handle_post(post)
                 return 0
 
-            if db_handler.handle_post(post):
+            if handle_post(post):
                 known_count += 1
                 print(f"New post: No. Occurrence {str(known_count)}# in a row")
                 if known_count == kwargs['max_known']:
@@ -62,9 +64,9 @@ def run(**kwargs):
         return 2
 
 
-# Initiate a MongoDB cluster and run scraper
+# Initiate a MongoDB collection and run scraper
 def scrape(**kwargs):
-    with open('cluster.txt', 'r') as file:
-        cluster = file.readline()
-    db_handler.init(cluster, kwargs['name'], kwargs['id'])
+
+    init_collection(kwargs['name'], kwargs['id'])
+
     return run(**kwargs)
